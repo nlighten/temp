@@ -20,6 +20,8 @@ jobs:
     outputs:
       subscriptions: ${{ steps.read-config.outputs.subscriptions }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Read Config
         id: read-config
         run: |
