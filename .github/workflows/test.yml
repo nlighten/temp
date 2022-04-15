@@ -18,6 +18,8 @@ jobs:
   az-cli-test:
     runs-on: ${{ github.event.inputs.runner }}
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
     - name: Run command
       run: |
         ${{ github.event.inputs.command }}
