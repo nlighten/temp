@@ -15,11 +15,27 @@ on:
 name: AzureCLITest
 
 jobs:
-  az-cli-test:
+  config:
     runs-on: ${{ github.event.inputs.runner }}
+    outputs:
+      subscriptions: ${{ steps.read-config.outputs.subscriptions }}
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Read Config
+        id: read-config
+        run: |
+          SUBSCRIPTIONS=$(yq -o=json '.' subscriptions.yaml | jq -c .subscriptions)
+          echo ::set-output name=subscriptions::${SUBSCRIPTIONS}
+
+
+  loop-subscriptions:
+    runs-on: ${{ github.event.inputs.runner }}
+    needs:
+      - config
+    strategy:
+      matrix:
+        subscription: ${{ fromJSON(needs.config.outputs.subscriptions) }}
+    steps:
     - name: Run command
       run: |
-        ${{ github.event.inputs.command }}
+        echo ${{ matrix.subscription.name }}
+        echo ${{ matrix.subscription.environments }}
