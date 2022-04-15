@@ -1,0 +1,8 @@
+subscriptions:
+  - name: foo
+    environments:
+      - non-prod
+      - prod
+  - bar: 
+    environments:
+      - non-prod
